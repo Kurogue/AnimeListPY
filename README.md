@@ -6,6 +6,7 @@ This is a side project of mine where I wanted to work with python and APIs in or
 This program was tested and implemented using an Arch Linux installation.
 
 **Dependencies**
+
 The program requires that the `requests` package is installed from the python library, everything else works as intended.
 
 ```python -m pip install requests```
