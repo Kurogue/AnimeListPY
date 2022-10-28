@@ -7,6 +7,7 @@ This program was tested and implemented using an Arch Linux installation.
 
 **Dependencies**
 The program requires that the `requests` package is installed from the python library, everything else works as intended.
+
 ```python -m pip install requests```
 
 The current implentation of this program only works on Linux/MacOS.
