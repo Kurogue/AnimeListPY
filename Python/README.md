@@ -15,3 +15,4 @@ Goals to impelemnt
 
 - A way to have users add their own anime to the list
 - Add a way for the file to be executed without having to type `python main.py`
+- Implement a JavaScript version of this program
