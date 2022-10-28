@@ -5,15 +5,15 @@ This is a side project of mine where I wanted to work with python and APIs in or
 
 This program was tested and implemented using an Arch Linux installation.
 
+The current implentation of this program only works on Linux/MacOS.
+
 **Dependencies**
 
 The program requires that the `requests` package is installed from the python library, everything else works as intended.
 
 ```python -m pip install requests```
 
-The current implentation of this program only works on Linux/MacOS.
-
-Goals to impelemnt
+**Goals to impelemnt**
 
 - A way to have users add their own anime to the list
 - Add a way for the file to be executed without having to type `python main.py`
