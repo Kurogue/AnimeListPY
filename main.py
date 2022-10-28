@@ -22,7 +22,7 @@ print("Welcome to AnimeListCLI. Please input \"random\", \"list\", \"airing\", \
 userInput = input("Please input a selection: ")
 
 #An infinite while loop to always get user input until they want to exit the program
-while(bool(True)):
+while(True):
     if(userInput.lower() == "random"):
         os.system("clear")
         response = requests.get("https://api.jikan.moe/v4/random/anime")    #Gets the data from the API and stores it
