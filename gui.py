@@ -15,10 +15,23 @@ def randomButton():
     label_animeTitle = Label(random, text = "So I'm a Spider, So What?", font =  ('Arial', 18))
     label_jpTitle = Label(random, text = "Kumo desu ga, Nani ka?", font = ('Arial', 14))
     label_animeImg = Label(random, image = img)
+    label_search = Label(random, text = "Search for an anime: ")
+    entry_searchBar = Entry(random)
+    button_search = Button(random, text = "Search")
+    label_score = Label(random, text = "Score", font = ('Arial', 14))
+    label_scoreNum = Label(random, text = "7.4/10", font = ('Arial', 16, 'bold'))
 
-    label_animeTitle.place(x = 5, y = 5, anchor = 'nw')
-    label_jpTitle.place(x = 5, y = 35, anchor = 'nw')
-    label_animeImg.place(x = 5, y = 90)
+    label_animeTitle.place(relx = .01, rely = .01, anchor = 'nw')
+    label_jpTitle.place(relx = .01, rely = .051, anchor = 'nw')
+    label_animeImg.place(relx = .01, rely = .13, anchor = 'nw')
+
+    label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
+    button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
+    label_score.place(relx = 0.35, rely = 0.25, anchor = 'center')
+    label_scoreNum.place(relx = 0.35, rely = 0.29, anchor = 'center')
+
+    # For the random anime button it will just do another fetch request and rewrite the displayed data already shown instead of destroying a window
     
     random.mainloop()
 
@@ -52,7 +65,7 @@ button_random = Button(buttonFrame, text = "Random", height = 3, width = 10, com
 button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10)
 label_search = Label(entryFrame, text = "Search for an anime: ")
 entry_searchBar = Entry(entryFrame)
-button_search = Button(entryFrame, text = "Submit")
+button_search = Button(entryFrame, text = "Search")
 
 #Placing the items into the frames/GUI
 label_Title.pack(pady = (100, 20))
@@ -71,12 +84,17 @@ label_description.config(font = descriptionFont, text = "Welcome to AnimeListGUI
 USE PLACE FOR THE OTHER WINDOWS 
 
 List - show the title, the image, the score and the url to the mal (should you be able to see the recommended anime here?)
+    The recommendations would show the title of the show, the score and the image of it
+
 Random - show the title, the image, the score, the url, 4-5 similar animes
+
 Airing - Basically the list without the scores (like in progress)
+
 Clear will be a function within the list where you will be able to clear your list
+
 Quit - X button at the top
 
-Search - how do we implement it?
+Search - how do we implement it? (Back end problem)
 '''
 
 
