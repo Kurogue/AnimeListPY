@@ -21,9 +21,9 @@ def randomButton():
     label_score = Label(random, text = "Score", font = ('Arial', 14))
     label_scoreNum = Label(random, text = "7.4/10", font = ('Arial', 16, 'bold'))
 
-    label_animeTitle.place(relx = .01, rely = .01, anchor = 'nw')
-    label_jpTitle.place(relx = .01, rely = .051, anchor = 'nw')
-    label_animeImg.place(relx = .01, rely = .13, anchor = 'nw')
+    label_animeTitle.place(relx = .02, rely = .02, anchor = 'nw')
+    label_jpTitle.place(relx = .02, rely = .061, anchor = 'nw')
+    label_animeImg.place(relx = .02, rely = .12, anchor = 'nw')
 
     label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
     entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
