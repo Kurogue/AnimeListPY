@@ -20,16 +20,24 @@ def randomButton():
     button_search = Button(random, text = "Search")
     label_score = Label(random, text = "Score", font = ('Arial', 14))
     label_scoreNum = Label(random, text = "7.4/10", font = ('Arial', 16, 'bold'))
+    button_list = Button(random, text = "List", height = 3, width = 10)
+    button_random = Button(random, text = "Random", height = 3, width = 10)
+    button_airing = Button(random, text = "Airing", height = 3, width = 10)
+
 
     label_animeTitle.place(relx = .02, rely = .02, anchor = 'nw')
     label_jpTitle.place(relx = .02, rely = .061, anchor = 'nw')
     label_animeImg.place(relx = .02, rely = .12, anchor = 'nw')
-
     label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
     entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
     button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
     label_score.place(relx = 0.35, rely = 0.25, anchor = 'center')
     label_scoreNum.place(relx = 0.35, rely = 0.29, anchor = 'center')
+    
+    button_random.place(relx = 0.85, rely = 0.225, anchor = 'e')
+    button_list.place(relx = 0.85, rely = 0.35, anchor = 'e')
+    button_airing.place(relx = 0.85, rely = 0.475, anchor = 'e')
+    
 
     # For the random anime button it will just do another fetch request and rewrite the displayed data already shown instead of destroying a window
     
