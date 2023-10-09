@@ -11,6 +11,12 @@ def randomButton():
     random.geometry("1000x700")
 
     img = ImageTk.PhotoImage(Image.open("Kumodesu.jpg"))
+    rec1 = Image.open("slime.jpg")
+    rec1 = rec1.resize((70, 100))
+    rec1 = ImageTk.PhotoImage(rec1)
+    rec2 = Image.open("overlord.jpg")
+    rec2 = rec2.resize((70, 100))
+    rec2 = ImageTk.PhotoImage(rec2)
 
     label_animeTitle = Label(random, text = "So I'm a Spider, So What?", font =  ('Arial', 18))
     label_jpTitle = Label(random, text = "Kumo desu ga, Nani ka?", font = ('Arial', 14))
@@ -23,6 +29,11 @@ def randomButton():
     button_list = Button(random, text = "List", height = 3, width = 10)
     button_random = Button(random, text = "Random", height = 3, width = 10)
     button_airing = Button(random, text = "Airing", height = 3, width = 10)
+    label_rec = Label(random, text = "Recommendations", font = ('Arial', 14, 'bold'))
+    label_rec1 = Label(random, image = rec1, width = 70, height = 100)
+    label_rec1Score = Label(random, text = "That Time I Got Reincarnated as a Slime\nScore: 8.14 / 10", font = ('Arial', 12))
+    label_rec2 = Label(random, image = rec2, width = 70, height = 100)
+    label_rec2Score = Label(random, text = "Overlord\nScore: 7.91 / 10", font = ('Arial', 12))
 
 
     label_animeTitle.place(relx = .02, rely = .02, anchor = 'nw')
@@ -33,6 +44,12 @@ def randomButton():
     button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
     label_score.place(relx = 0.35, rely = 0.25, anchor = 'center')
     label_scoreNum.place(relx = 0.35, rely = 0.29, anchor = 'center')
+    label_rec.place(relx = .02, rely = .65, anchor = 'sw')
+
+    label_rec1.place(relx = 0.02, rely = .81, anchor = 'sw')
+    label_rec1Score.place(relx = 0.12, rely = .75, anchor = 'sw')
+    label_rec2.place(relx = 0.02, rely = .975, anchor = 'sw')
+    label_rec2Score.place(relx = 0.12, rely = .925, anchor = 'sw')
     
     button_random.place(relx = 0.85, rely = 0.225, anchor = 'e')
     button_list.place(relx = 0.85, rely = 0.35, anchor = 'e')
