@@ -35,7 +35,6 @@ def randomButton():
     label_rec2 = Label(random, image = rec2, width = 70, height = 100)
     label_rec2Score = Label(random, text = "Overlord\nScore: 7.91 / 10", font = ('Arial', 12))
 
-
     label_animeTitle.place(relx = .02, rely = .02, anchor = 'nw')
     label_jpTitle.place(relx = .02, rely = .061, anchor = 'nw')
     label_animeImg.place(relx = .02, rely = .12, anchor = 'nw')
@@ -55,17 +54,24 @@ def randomButton():
     button_list.place(relx = 0.85, rely = 0.35, anchor = 'e')
     button_airing.place(relx = 0.85, rely = 0.475, anchor = 'e')
     
-
     # For the random anime button it will just do another fetch request and rewrite the displayed data already shown instead of destroying a window
     
     random.mainloop()
 
+#Probably going to need scroll wheels on the right side of the screens for both list and airing
 def listButton():
     root.destroy()
     list = Tk()
     list.title("AnimeListGUI List")
     list.geometry("1000x700")
     list.mainloop()
+
+def airingButton():
+    root.destroy()
+    airing = Tk()
+    airing.title("AnimeListGUI Airing")
+    airing.geometry("1000x 700")
+    airing.mainloop()
 
 #GUI itself
 root = Tk()
@@ -87,7 +93,7 @@ label_Title = Label(root)
 label_description = Label(root)
 button_list = Button(buttonFrame, text = "List", height = 3, width = 10, command = listButton)
 button_random = Button(buttonFrame, text = "Random", height = 3, width = 10, command = randomButton)
-button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10)
+button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = airingButton)
 label_search = Label(entryFrame, text = "Search for an anime: ")
 entry_searchBar = Entry(entryFrame)
 button_search = Button(entryFrame, text = "Search")
