@@ -1,7 +1,9 @@
 from tkinter import *
 import tkinter.font as tkFont
 from PIL import ImageTk, Image
-import os
+import os, glob
+from tkinter.constants import *
+from tkinter.scrolledtext import ScrolledText
 
 #Fucntions for Buttons
 def randomButton():
@@ -59,11 +61,35 @@ def randomButton():
     random.mainloop()
 
 #Probably going to need scroll wheels on the right side of the screens for both list and airing
+# List would show the scores while airing would only show the titles and image (maybe url)
 def listButton():
     root.destroy()
     list = Tk()
     list.title("AnimeListGUI List")
     list.geometry("1000x700")
+
+    scrollList = ScrolledText(list)
+    scrollList.pack(side = "left", fill = 'both', expand = True)
+
+    #Use a listbox or textbox or wtf it is called
+    #Retrive them from a json file then store them into lists or smt
+    imgList = ["tengoku.jpg", "Kumodesu.jpg", "overlord.jpg", "slime.jpg"]
+    titleEN = ['Heavenly Dillusion', "So I\'m a Spider, So What?", "Overlord", "That Time I Got Reincarnated as a Slime"]
+    titleJP = ["Tengoku Daimakyou", "Kumo Desu ga, Nani ka?", "", "Tensei shitara Slime Datta Ken"]
+    scores = ["8.2/10", "7.45", "7.9/10", "8.14/10"]
+
+    count = 0
+    for x in imgList:
+        img = Image.open(x)
+        img = ImageTk.PhotoImage(img)
+
+        scrollList.insert(INSERT, titleEN[count] + '\n' + titleJP[count] + '\nScore: ' + scores[count] + '\n')
+        scrollList.image_create(INSERT, padx = 5, pady = 5, image = img)
+        scrollList.insert(INSERT, '\n')
+        count+=1
+
+    scrollList.config(state = "disabled")
+
     list.mainloop()
 
 def airingButton():
