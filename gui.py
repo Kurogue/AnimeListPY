@@ -78,14 +78,17 @@ def listButton():
     titleJP = ["Tengoku Daimakyou", "Kumo Desu ga, Nani ka?", "", "Tensei shitara Slime Datta Ken"]
     scores = ["8.2/10", "7.45", "7.9/10", "8.14/10"]
 
+    imgRef = []
+
     count = 0
     for x in imgList:
         img = Image.open(x)
         img = ImageTk.PhotoImage(img)
+        imgRef.append(img)
 
         scrollList.insert(INSERT, titleEN[count] + '\n' + titleJP[count] + '\nScore: ' + scores[count] + '\n')
         scrollList.image_create(INSERT, padx = 5, pady = 5, image = img)
-        scrollList.insert(INSERT, '\n')
+        scrollList.insert(INSERT, '\n\n\n')
         count+=1
 
     scrollList.config(state = "disabled")
