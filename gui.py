@@ -9,7 +9,7 @@ from tkinter.scrolledtext import ScrolledText
 def randomButton():
     root.destroy()
     random = Tk()
-    random.title("AnimeListGUI Random")
+    random.title("AnimeListGUI: Random Anime")
     random.geometry("1000x700")
 
     img = ImageTk.PhotoImage(Image.open("Kumodesu.jpg"))
@@ -69,14 +69,13 @@ def listButton():
     list.geometry("1000x700")
 
     scrollList = ScrolledText(list)
-    scrollList.pack(side = "left", fill = 'both', expand = True)
+    scrollList.pack(side = "left", fill = 'both')
 
-    #Use a listbox or textbox or wtf it is called
     #Retrive them from a json file then store them into lists or smt
     imgList = ["tengoku.jpg", "Kumodesu.jpg", "overlord.jpg", "slime.jpg"]
     titleEN = ['Heavenly Dillusion', "So I\'m a Spider, So What?", "Overlord", "That Time I Got Reincarnated as a Slime"]
     titleJP = ["Tengoku Daimakyou", "Kumo Desu ga, Nani ka?", "", "Tensei shitara Slime Datta Ken"]
-    scores = ["8.2/10", "7.45", "7.9/10", "8.14/10"]
+    scores = ["8.2/10", "7.45", "7.9/10", "8.1/10"]
 
     imgRef = []
 
@@ -93,13 +92,70 @@ def listButton():
 
     scrollList.config(state = "disabled")
 
+    button_list = Button(list, text = "List", height = 3, width = 10)
+    button_random = Button(list, text = "Random", height = 3, width = 10)
+    button_airing = Button(list, text = "Airing", height = 3, width = 10)
+
+    button_random.place(relx = 0.9, rely = 0.3, anchor = 'e')
+    button_list.place(relx = 0.9, rely = 0.425, anchor = 'e')
+    button_airing.place(relx = 0.9, rely = 0.55, anchor = 'e')
+
+    label_search = Label(list, text = "Search for an anime: ")
+    entry_searchBar = Entry(list)
+    button_search = Button(list, text = "Search")
+
+    label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
+    button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
+
     list.mainloop()
 
 def airingButton():
     root.destroy()
     airing = Tk()
-    airing.title("AnimeListGUI Airing")
-    airing.geometry("1000x 700")
+    airing.title("AnimeListGUI: Currently Airing Anime")
+    airing.geometry("1000x700")
+
+    scrollList = ScrolledText(airing)
+    scrollList.pack(side = "left", fill = 'both')
+
+    #Retrive them from a json file then store them into lists or smt
+    imgList = ["spyFam.jpg", "tate.jpg", "frieren.jpg", "stone.jpg", "undead.jpg"]
+    titleEN = ['Spy x Family Season 2', "The Rising of the Shield Hero Season 3", "Frieren: Beyond Journey's End", "Dr. Stone: New World Part 2", "Undead Unluck"]
+    titleJP = ["", "Tate no Yuusha no Nariagari Season 3", "Sousou no Frieren", "", ""]
+    scores = ["8.5/10", "7.7", "8.9/10", "N/A", "8.1/10"]
+
+    imgRef = []
+
+    count = 0
+    for x in imgList:
+        img = Image.open(x)
+        img = ImageTk.PhotoImage(img)
+        imgRef.append(img)
+
+        scrollList.insert(INSERT, titleEN[count] + '\n' + titleJP[count] + '\nScore: ' + scores[count] + '\n')
+        scrollList.image_create(INSERT, padx = 5, pady = 5, image = img)
+        scrollList.insert(INSERT, '\n\n\n')
+        count+=1
+
+    scrollList.config(state = "disabled")
+
+    button_list = Button(airing, text = "List", height = 3, width = 10)
+    button_random = Button(airing, text = "Random", height = 3, width = 10)
+    button_airing = Button(airing, text = "Airing", height = 3, width = 10)
+
+    button_random.place(relx = 0.9, rely = 0.3, anchor = 'e')
+    button_list.place(relx = 0.9, rely = 0.425, anchor = 'e')
+    button_airing.place(relx = 0.9, rely = 0.55, anchor = 'e')
+
+    label_search = Label(airing, text = "Search for an anime: ")
+    entry_searchBar = Entry(airing)
+    button_search = Button(airing, text = "Search")
+
+    label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
+    button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
+
     airing.mainloop()
 
 #GUI itself
