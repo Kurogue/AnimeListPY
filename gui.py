@@ -5,9 +5,33 @@ import os, glob
 from tkinter.constants import *
 from tkinter.scrolledtext import ScrolledText
 
+
+def rootRandom():
+    root.destroy()
+    randomButton()
+
+def rootAiring():
+    root.destroy()
+    airingButton()
+
+def rootList():
+    root.destroy()
+    listButton()
+
+def listAiring():
+    list.destory()
+    airingButton()
+
+def airingRandom():
+    airing.destroy()
+    randomButton()
+
+def airingList():
+    airing.destory()
+    listButton()
+
 #Fucntions for Buttons
 def randomButton():
-    root.destroy()
     random = Tk()
     random.title("AnimeListGUI: Random Anime")
     random.geometry("1000x700")
@@ -28,9 +52,9 @@ def randomButton():
     button_search = Button(random, text = "Search")
     label_score = Label(random, text = "Score", font = ('Arial', 14))
     label_scoreNum = Label(random, text = "7.4/10", font = ('Arial', 16, 'bold'))
-    button_list = Button(random, text = "List", height = 3, width = 10)
+    button_list = Button(random, text = "List", height = 3, width = 10, command = lambda: [random.destroy(), listButton()])
     button_random = Button(random, text = "Random", height = 3, width = 10)
-    button_airing = Button(random, text = "Airing", height = 3, width = 10)
+    button_airing = Button(random, text = "Airing", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()])
     label_rec = Label(random, text = "Recommendations", font = ('Arial', 14, 'bold'))
     label_rec1 = Label(random, image = rec1, width = 70, height = 100)
     label_rec1Score = Label(random, text = "That Time I Got Reincarnated as a Slime\nScore: 8.14 / 10", font = ('Arial', 12))
@@ -57,13 +81,15 @@ def randomButton():
     button_airing.place(relx = 0.85, rely = 0.475, anchor = 'e')
     
     # For the random anime button it will just do another fetch request and rewrite the displayed data already shown instead of destroying a window
+    # Maybe add a save to list function?
+    # pressing the random anime should just replace the labels and images, see comments (make it a function)
+
     
     random.mainloop()
 
 #Probably going to need scroll wheels on the right side of the screens for both list and airing
 # List would show the scores while airing would only show the titles and image (maybe url)
 def listButton():
-    root.destroy()
     list = Tk()
     list.title("AnimeListGUI: Your List")
     list.geometry("1000x700")
@@ -92,13 +118,13 @@ def listButton():
 
     scrollList.config(state = "disabled")
 
-    button_list = Button(list, text = "List", height = 3, width = 10)
-    button_random = Button(list, text = "Random", height = 3, width = 10)
-    button_airing = Button(list, text = "Airing", height = 3, width = 10)
+    # button_list = Button(list, text = "List", height = 3, width = 10)
+    button_random = Button(list, text = "Random", height = 3, width = 10, command = lambda: [list.destroy(), randomButton()])
+    button_airing = Button(list, text = "Airing", height = 3, width = 10, command = lambda: [list.destroy(), airingButton()])
 
     button_random.place(relx = 0.9, rely = 0.3, anchor = 'e')
-    button_list.place(relx = 0.9, rely = 0.425, anchor = 'e')
-    button_airing.place(relx = 0.9, rely = 0.55, anchor = 'e')
+    # button_list.place(relx = 0.9, rely = 0.425, anchor = 'e')
+    button_airing.place(relx = 0.9, rely = 0.425, anchor = 'e')
 
     label_search = Label(list, text = "Search for an anime: ")
     entry_searchBar = Entry(list)
@@ -111,7 +137,6 @@ def listButton():
     list.mainloop()
 
 def airingButton():
-    root.destroy()
     airing = Tk()
     airing.title("AnimeListGUI: Currently Airing Anime")
     airing.geometry("1000x700")
@@ -140,13 +165,13 @@ def airingButton():
 
     scrollList.config(state = "disabled")
 
-    button_list = Button(airing, text = "List", height = 3, width = 10)
-    button_random = Button(airing, text = "Random", height = 3, width = 10)
-    button_airing = Button(airing, text = "Airing", height = 3, width = 10)
+    button_list = Button(airing, text = "List", height = 3, width = 10, command = lambda: [airing.destroy(), listButton()])
+    button_random = Button(airing, text = "Random", height = 3, width = 10, command = lambda: [airing.destory(), randomButton()])
+    # button_airing = Button(airing, text = "Airing", height = 3, width = 10)
 
     button_random.place(relx = 0.9, rely = 0.3, anchor = 'e')
     button_list.place(relx = 0.9, rely = 0.425, anchor = 'e')
-    button_airing.place(relx = 0.9, rely = 0.55, anchor = 'e')
+    # button_airing.place(relx = 0.9, rely = 0.55, anchor = 'e')
 
     label_search = Label(airing, text = "Search for an anime: ")
     entry_searchBar = Entry(airing)
@@ -176,9 +201,9 @@ descriptionFont = tkFont.Font(size = 14)
 #Items to populate the frames and GUI
 label_Title = Label(root)
 label_description = Label(root)
-button_list = Button(buttonFrame, text = "List", height = 3, width = 10, command = listButton)
-button_random = Button(buttonFrame, text = "Random", height = 3, width = 10, command = randomButton)
-button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = airingButton)
+button_list = Button(buttonFrame, text = "List", height = 3, width = 10, command = rootList)
+button_random = Button(buttonFrame, text = "Random", height = 3, width = 10, command = rootRandom)
+button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = rootAiring)
 label_search = Label(entryFrame, text = "Search for an anime: ")
 entry_searchBar = Entry(entryFrame)
 button_search = Button(entryFrame, text = "Search")
@@ -211,6 +236,8 @@ Clear will be a function within the list where you will be able to clear your li
 Quit - X button at the top
 
 Search - how do we implement it? (Back end problem)
+
+In order for the windows to be properly destroyed inside of the 3 different branches, the solution is to have more functions that destory the parent window depending on where it is
 '''
 
 
