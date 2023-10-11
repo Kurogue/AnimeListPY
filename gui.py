@@ -65,7 +65,7 @@ def randomButton():
 def listButton():
     root.destroy()
     list = Tk()
-    list.title("AnimeListGUI List")
+    list.title("AnimeListGUI: Your List")
     list.geometry("1000x700")
 
     scrollList = ScrolledText(list)
