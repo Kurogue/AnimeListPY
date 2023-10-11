@@ -18,18 +18,6 @@ def rootList():
     root.destroy()
     listButton()
 
-def listAiring():
-    list.destory()
-    airingButton()
-
-def airingRandom():
-    airing.destroy()
-    randomButton()
-
-def airingList():
-    airing.destory()
-    listButton()
-
 #Fucntions for Buttons
 def randomButton():
     random = Tk()
@@ -236,8 +224,6 @@ Clear will be a function within the list where you will be able to clear your li
 Quit - X button at the top
 
 Search - how do we implement it? (Back end problem)
-
-In order for the windows to be properly destroyed inside of the 3 different branches, the solution is to have more functions that destory the parent window depending on where it is
 '''
 
 
