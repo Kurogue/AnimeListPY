@@ -141,7 +141,7 @@ def airingButton():
     scrollList.config(state = "disabled")
 
     button_list = Button(airing, text = "List", height = 3, width = 10, command = lambda: [airing.destroy(), listButton()])
-    button_random = Button(airing, text = "Random", height = 3, width = 10, command = lambda: [airing.destory(), randomButton()])
+    button_random = Button(airing, text = "Random", height = 3, width = 10, command = lambda: [airing.destroy(), randomButton()])
     # button_airing = Button(airing, text = "Airing", height = 3, width = 10)
 
     button_random.place(relx = 0.9, rely = 0.3, anchor = 'e')
