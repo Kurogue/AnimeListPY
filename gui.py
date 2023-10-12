@@ -5,19 +5,6 @@ import os, glob
 from tkinter.constants import *
 from tkinter.scrolledtext import ScrolledText
 
-
-def rootRandom():
-    root.destroy()
-    randomButton()
-
-def rootAiring():
-    root.destroy()
-    airingButton()
-
-def rootList():
-    root.destroy()
-    listButton()
-
 #Fucntions for Buttons
 def randomButton():
     random = Tk()
@@ -189,9 +176,9 @@ descriptionFont = tkFont.Font(size = 14)
 #Items to populate the frames and GUI
 label_Title = Label(root)
 label_description = Label(root)
-button_list = Button(buttonFrame, text = "List", height = 3, width = 10, command = rootList)
-button_random = Button(buttonFrame, text = "Random", height = 3, width = 10, command = rootRandom)
-button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = rootAiring)
+button_list = Button(buttonFrame, text = "List", height = 3, width = 10, command = lambda: [root.destroy(), listButton()])
+button_random = Button(buttonFrame, text = "Random", height = 3, width = 10, command = lambda: [root.destroy(), randomButton()])
+button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = lambda: [root.destrou(), airingButton()])
 label_search = Label(entryFrame, text = "Search for an anime: ")
 entry_searchBar = Entry(entryFrame)
 button_search = Button(entryFrame, text = "Search")
