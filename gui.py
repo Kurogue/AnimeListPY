@@ -1,9 +1,32 @@
 from tkinter import *
 import tkinter.font as tkFont
 from PIL import ImageTk, Image
-import os, glob
+import os, glob, requests, json, os.path
 from tkinter.constants import *
 from tkinter.scrolledtext import ScrolledText
+from io import BytesIO
+
+# Save Button is not working as intended, is saving to json file without calling function
+# def saveButton(request):    
+#     anime ={
+#         "Title" : request["data"]["title"],
+#         "English Title" : request["data"]['title_english'],
+#         "Cover Art" : request["data"]["images"]["jpg"]["image_url"],
+#         "Score" : request["data"]["score"],
+#         "ID" : request["data"]["mal_id"]
+#     }
+#     #Creates the JSON file for data storage and checks if the file is created if not then it will create one
+#     #This saves the programs data even when the program is shut off
+#     if not (os.path.exists('list.json')):
+#         with open('list.json', 'w') as f:
+#             print()
+#     output = []
+#     if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
+#         with open ('list.json', 'r') as outfile:
+#             output = json.load(outfile)
+#     output.append(anime)
+#     with open ('list.json', 'w') as outfile:
+#            json.dump(output, outfile, indent = 4)
 
 #Fucntions for Buttons
 def randomButton():
@@ -11,54 +34,89 @@ def randomButton():
     random.title("AnimeListGUI: Random Anime")
     random.geometry("1000x700")
 
-    img = ImageTk.PhotoImage(Image.open("Kumodesu.jpg"))
-    rec1 = Image.open("slime.jpg")
-    rec1 = rec1.resize((70, 100))
-    rec1 = ImageTk.PhotoImage(rec1)
-    rec2 = Image.open("overlord.jpg")
-    rec2 = rec2.resize((70, 100))
-    rec2 = ImageTk.PhotoImage(rec2)
+    respone = requests.get("https://api.jikan.moe/v4/random/anime")
+    randomJson = respone.json()
+    output = []
 
-    label_animeTitle = Label(random, text = "So I'm a Spider, So What?", font =  ('Arial', 18))
-    label_jpTitle = Label(random, text = "Kumo desu ga, Nani ka?", font = ('Arial', 14))
+    if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
+        with open ('list.json', 'r') as outfile:
+            output = json.load(outfile)
+    
+    # Grabs new random anime if the old one was in the list
+    while randomJson["data"]["mal_id"] in output:
+        respone = requests.get("https://api.jikan.moe/v4/random/anime")
+        randomJson = respone.json()
+
+    # Add an or in there if it is on the list already 
+    # This will skip all Rx rated animes from showing up in the random selection
+    while (randomJson['data']['rating'] == "Rx - Hentai"):
+        respone = requests.get("https://api.jikan.moe/v4/random/anime")
+        randomJson = respone.json()
+
+    img_url = randomJson["data"]["images"]["jpg"]["image_url"]
+    imgResponse = requests.get(img_url)
+    imgData = imgResponse.content
+    img = ImageTk.PhotoImage(Image.open(BytesIO(imgData)))
+
+    enTitle = ""
+    jpTitle = ""
+
+    if (randomJson["data"]["title_english"] == None):
+        enTitle = randomJson["data"]["title"]
+        jpTitle = randomJson["data"]["title"]
+    else:
+        enTitle = randomJson["data"]["title_english"]
+        jpTitle = randomJson["data"]["title"]
+
+    scoreText = ""
+    if (randomJson["data"]["score"] == None):
+        scoreText ="N/A"
+    else:
+        scoreText = randomJson["data"]["score"]
+
+    label_animeTitle = Label(random, text = enTitle, font =  ('Arial', 18))
+    label_jpTitle = Label(random, text = jpTitle, font = ('Arial', 14))
     label_animeImg = Label(random, image = img)
+    label_score = Label(random, text = "Score", font = ('Arial', 14))
+    label_scoreNum = Label(random, text = scoreText, font = ('Arial', 16, 'bold'))
+
+    button_save = Button(random, text = "Save", height = 3, width = 10) #command = saveButton(randomJson)
+
     label_search = Label(random, text = "Search for an anime: ")
     entry_searchBar = Entry(random)
     button_search = Button(random, text = "Search")
-    label_score = Label(random, text = "Score", font = ('Arial', 14))
-    label_scoreNum = Label(random, text = "7.4/10", font = ('Arial', 16, 'bold'))
     button_list = Button(random, text = "List", height = 3, width = 10, command = lambda: [random.destroy(), listButton()])
-    button_random = Button(random, text = "Random", height = 3, width = 10)
+    button_random = Button(random, text = "Random", height = 3, width = 10, command = lambda: [random.destroy(), randomButton()])
     button_airing = Button(random, text = "Airing", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()])
-    label_rec = Label(random, text = "Recommendations", font = ('Arial', 14, 'bold'))
-    label_rec1 = Label(random, image = rec1, width = 70, height = 100)
-    label_rec1Score = Label(random, text = "That Time I Got Reincarnated as a Slime\nScore: 8.14 / 10", font = ('Arial', 12))
-    label_rec2 = Label(random, image = rec2, width = 70, height = 100)
-    label_rec2Score = Label(random, text = "Overlord\nScore: 7.91 / 10", font = ('Arial', 12))
+
+    scrollList = ScrolledText(random, width = 900, height = 13)
+    scrollList.pack(side = 'bottom')
+    
+    label_synopsisTitle = Label(random, text = "Synopsis", font = ('Arial', 14, 'bold'))
+    if (randomJson['data']['synopsis'] != None):
+        scrollList.insert(INSERT, randomJson["data"]["synopsis"] + '\n')
 
     label_animeTitle.place(relx = .02, rely = .02, anchor = 'nw')
     label_jpTitle.place(relx = .02, rely = .061, anchor = 'nw')
     label_animeImg.place(relx = .02, rely = .12, anchor = 'nw')
-    label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
-    entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
-    button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
+
+    label_search.place(relx = 0.9, rely = 0.15, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .195, anchor = 'ne')
+    button_search.place(relx = 0.95, rely = .195, anchor = 'ne')
+
     label_score.place(relx = 0.35, rely = 0.25, anchor = 'center')
     label_scoreNum.place(relx = 0.35, rely = 0.29, anchor = 'center')
-    label_rec.place(relx = .02, rely = .65, anchor = 'sw')
-
-    label_rec1.place(relx = 0.02, rely = .81, anchor = 'sw')
-    label_rec1Score.place(relx = 0.12, rely = .75, anchor = 'sw')
-    label_rec2.place(relx = 0.02, rely = .975, anchor = 'sw')
-    label_rec2Score.place(relx = 0.12, rely = .925, anchor = 'sw')
     
-    button_random.place(relx = 0.85, rely = 0.225, anchor = 'e')
-    button_list.place(relx = 0.85, rely = 0.35, anchor = 'e')
-    button_airing.place(relx = 0.85, rely = 0.475, anchor = 'e')
+    label_synopsisTitle.place(relx = 0.02, rely = .65, anchor = 'w')
+    
+    button_random.place(relx = 0.85, rely = 0.325, anchor = 'e')
+    button_list.place(relx = 0.85, rely = 0.45, anchor = 'e')
+    button_airing.place(relx = 0.85, rely = 0.575, anchor = 'e')
+    button_save.place(relx = 0.292, rely = .35)
     
     # For the random anime button it will just do another fetch request and rewrite the displayed data already shown instead of destroying a window
     # Maybe add a save to list function?
     # pressing the random anime should just replace the labels and images, see comments (make it a function)
-
     
     random.mainloop()
 
