@@ -41,15 +41,10 @@ def randomButton():
     if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
         with open ('list.json', 'r') as outfile:
             output = json.load(outfile)
-    
-    # Grabs new random anime if the old one was in the list
-    while randomJson["data"]["mal_id"] in output:
-        respone = requests.get("https://api.jikan.moe/v4/random/anime")
-        randomJson = respone.json()
-
-    # Add an or in there if it is on the list already 
-    # This will skip all Rx rated animes from showing up in the random selection
-    while (randomJson['data']['rating'] == "Rx - Hentai"):
+ 
+    # This will skip all Rx rated animes from showing up in the random selection, also if it is in the list alread
+    # This will also check to see if there is a 500 error code, server side, that could not properly fetch the request to get another anime
+    while (randomJson['data']['rating'] == "Rx - Hentai" or respone.status_code == 500 or randomJson["data"]["mal_id"] in output):
         respone = requests.get("https://api.jikan.moe/v4/random/anime")
         randomJson = respone.json()
 
@@ -72,7 +67,7 @@ def randomButton():
     if (randomJson["data"]["score"] == None):
         scoreText ="N/A"
     else:
-        scoreText = randomJson["data"]["score"]
+        scoreText = str(randomJson["data"]["score"]) + "/10"
 
     label_animeTitle = Label(random, text = enTitle, font =  ('Arial', 18))
     label_jpTitle = Label(random, text = jpTitle, font = ('Arial', 14))
@@ -114,6 +109,7 @@ def randomButton():
     button_airing.place(relx = 0.85, rely = 0.575, anchor = 'e')
     button_save.place(relx = 0.292, rely = .35)
     
+    scrollList.config(state = "disabled")
     # For the random anime button it will just do another fetch request and rewrite the displayed data already shown instead of destroying a window
     # Maybe add a save to list function?
     # pressing the random anime should just replace the labels and images, see comments (make it a function)
