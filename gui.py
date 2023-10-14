@@ -7,26 +7,26 @@ from tkinter.scrolledtext import ScrolledText
 from io import BytesIO
 
 # Save Button is not working as intended, is saving to json file without calling function
-# def saveButton(request):    
-#     anime ={
-#         "Title" : request["data"]["title"],
-#         "English Title" : request["data"]['title_english'],
-#         "Cover Art" : request["data"]["images"]["jpg"]["image_url"],
-#         "Score" : request["data"]["score"],
-#         "ID" : request["data"]["mal_id"]
-#     }
-#     #Creates the JSON file for data storage and checks if the file is created if not then it will create one
-#     #This saves the programs data even when the program is shut off
-#     if not (os.path.exists('list.json')):
-#         with open('list.json', 'w') as f:
-#             print()
-#     output = []
-#     if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
-#         with open ('list.json', 'r') as outfile:
-#             output = json.load(outfile)
-#     output.append(anime)
-#     with open ('list.json', 'w') as outfile:
-#            json.dump(output, outfile, indent = 4)
+def saveButton(request):    
+    anime ={
+        "Title" : request["data"]["title"],
+        "English Title" : request["data"]['title_english'],
+        "Cover Art" : request["data"]["images"]["jpg"]["image_url"],
+        "Score" : request["data"]["score"],
+        "ID" : request["data"]["mal_id"]
+    }
+    #Creates the JSON file for data storage and checks if the file is created if not then it will create one
+    #This saves the programs data even when the program is shut off
+    if not (os.path.exists('list.json')):
+        with open('list.json', 'w') as f:
+            print()
+    output = []
+    if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
+        with open ('list.json', 'r') as outfile:
+            output = json.load(outfile)
+    output.append(anime)
+    with open ('list.json', 'w') as outfile:
+           json.dump(output, outfile, indent = 4)
 
 #Fucntions for Buttons
 def randomButton():
@@ -80,7 +80,7 @@ def randomButton():
     label_score = Label(random, text = "Score", font = ('Arial', 14))
     label_scoreNum = Label(random, text = scoreText, font = ('Arial', 16, 'bold'))
 
-    button_save = Button(random, text = "Save", height = 3, width = 10) #command = saveButton(randomJson)
+    button_save = Button(random, text = "Save", height = 3, width = 10, command = lambda: saveButton(randomJson))
 
     label_search = Label(random, text = "Search for an anime: ")
     entry_searchBar = Entry(random)
@@ -122,6 +122,7 @@ def randomButton():
 
 #Probably going to need scroll wheels on the right side of the screens for both list and airing
 # List would show the scores while airing would only show the titles and image (maybe url)
+# Add a button to clear the JSON List
 def listButton():
     list = Tk()
     list.title("AnimeListGUI: Your List")
