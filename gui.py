@@ -45,6 +45,11 @@ def randomButton():
 
     respone = requests.get("https://api.jikan.moe/v4/random/anime")
     randomJson = respone.json()
+    output = []
+
+    if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
+        with open ('list.json', 'r') as outfile:
+            output = json.load(outfile)
  
     # This will skip all Rx rated animes from showing up in the random selection, also if it is in the list alread
     # This will also check to see if there is a 500 error code, server side, that could not properly fetch the request to get another anime
