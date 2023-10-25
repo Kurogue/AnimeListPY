@@ -6,7 +6,7 @@ from tkinter.constants import *
 from tkinter.scrolledtext import ScrolledText
 from io import BytesIO
 
-# Save Button is not working as intended, is saving to json file without calling function
+# Sub functions for buttons inside the 3 different main buttons
 def saveButton(request):    
     anime ={
         "Title" : request["data"]["title"],
@@ -28,7 +28,16 @@ def saveButton(request):
     with open ('list.json', 'w') as outfile:
            json.dump(output, outfile, indent = 4)
 
-#Fucntions for Buttons
+
+def clearList(scrollList):
+    scrollList.config(state = "normal")
+    scrollList.delete('1.0', END)
+    scrollList.insert(INSERT, "List is empty.")
+    scrollList.config(state = "disabled")
+    with open('list.json', 'w') as f:
+        print()
+
+#Fucntions for 3 main buttons
 def randomButton():
     random = Tk()
     random.title("AnimeListGUI: Random Anime")
@@ -36,15 +45,10 @@ def randomButton():
 
     respone = requests.get("https://api.jikan.moe/v4/random/anime")
     randomJson = respone.json()
-    output = []
-
-    if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
-        with open ('list.json', 'r') as outfile:
-            output = json.load(outfile)
  
     # This will skip all Rx rated animes from showing up in the random selection, also if it is in the list alread
     # This will also check to see if there is a 500 error code, server side, that could not properly fetch the request to get another anime
-    while (randomJson['data']['rating'] == "Rx - Hentai" or respone.status_code == 500 or randomJson["data"]["mal_id"] in output):
+    while (respone.status_code == 500 or randomJson['data']['rating'] == "Rx - Hentai"  or randomJson["data"]["mal_id"] in output):
         respone = requests.get("https://api.jikan.moe/v4/random/anime")
         randomJson = respone.json()
 
@@ -127,34 +131,46 @@ def listButton():
     scrollList = ScrolledText(list)
     scrollList.pack(side = "left", fill = 'both')
 
-    #Retrive them from a json file then store them into lists or smt
-    imgList = ["tengoku.jpg", "Kumodesu.jpg", "overlord.jpg", "slime.jpg"]
-    titleEN = ['Heavenly Dillusion', "So I\'m a Spider, So What?", "Overlord", "That Time I Got Reincarnated as a Slime"]
-    titleJP = ["Tengoku Daimakyou", "Kumo Desu ga, Nani ka?", "", "Tensei shitara Slime Datta Ken"]
-    scores = ["8.2/10", "7.45", "7.9/10", "8.1/10"]
-
+    output = []
     imgRef = []
+    enTitle = ""
+    jpTitle = ""
 
-    count = 0
-    for x in imgList:
-        img = Image.open(x)
-        img = ImageTk.PhotoImage(img)
-        imgRef.append(img)
+    if (os.stat("list.json").st_size == 0):
+        scrollList.insert(INSERT, "List is empty.")
+    else:
+        with open ('list.json', 'r') as outfile:
+            output = json.load(outfile)
 
-        scrollList.insert(INSERT, titleEN[count] + '\n' + titleJP[count] + '\nScore: ' + scores[count] + '\n')
-        scrollList.image_create(INSERT, padx = 5, pady = 5, image = img)
-        scrollList.insert(INSERT, '\n\n\n')
-        count+=1
+        for data in output:
+            img_url = data["Cover Art"]
+            imgResponse = requests.get(img_url)
+            imgData = imgResponse.content
+            img = ImageTk.PhotoImage(Image.open(BytesIO(imgData)))
+
+            imgRef.append(img)
+
+            if(data['English Title'] == None):
+                enTitle = data["Title"]
+                jpTitle = data["Title"]
+            else:
+                enTitle = data["English Title"]
+                jpTitle = data["Title"]
+
+            scrollList.insert(INSERT, enTitle + '\n' + jpTitle + '\nScore: ' + str(data["Score"]) + '\n')
+            scrollList.image_create(INSERT, padx = 5, pady = 5, image = img)
+            scrollList.insert(INSERT, '\n\n\n')
+
 
     scrollList.config(state = "disabled")
 
-    # button_list = Button(list, text = "List", height = 3, width = 10)
+    button_clear = Button(list, text = "Clear", height = 3, width = 10, command = lambda: [clearList(scrollList)])
     button_random = Button(list, text = "Random", height = 3, width = 10, command = lambda: [list.destroy(), randomButton()])
     button_airing = Button(list, text = "Airing", height = 3, width = 10, command = lambda: [list.destroy(), airingButton()])
 
-    button_random.place(relx = 0.9, rely = 0.3, anchor = 'e')
-    # button_list.place(relx = 0.9, rely = 0.425, anchor = 'e')
-    button_airing.place(relx = 0.9, rely = 0.425, anchor = 'e')
+    button_clear.place(relx = 0.9, rely = 0.3, anchor = 'e')
+    button_random.place(relx = 0.9, rely = 0.425, anchor = 'e')
+    button_airing.place(relx = 0.9, rely = 0.55, anchor = 'e')
 
     label_search = Label(list, text = "Search for an anime: ")
     entry_searchBar = Entry(list)
@@ -174,24 +190,43 @@ def airingButton():
     scrollList = ScrolledText(airing)
     scrollList.pack(side = "left", fill = 'both')
 
+    respone = requests.get("https://api.jikan.moe/v4/seasons/now")
+    airingJson = respone.json()
+    jsonSize = len(airingJson['data'])
+
     #Retrive them from a json file then store them into lists or smt
-    imgList = ["spyFam.jpg", "tate.jpg", "frieren.jpg", "stone.jpg", "undead.jpg"]
-    titleEN = ['Spy x Family Season 2', "The Rising of the Shield Hero Season 3", "Frieren: Beyond Journey's End", "Dr. Stone: New World Part 2", "Undead Unluck"]
-    titleJP = ["", "Tate no Yuusha no Nariagari Season 3", "Sousou no Frieren", "", ""]
-    scores = ["8.5/10", "7.7", "8.9/10", "N/A", "8.1/10"]
+    # imgList = ["spyFam.jpg", "tate.jpg", "frieren.jpg", "stone.jpg", "undead.jpg"]
+    # titleEN = ['Spy x Family Season 2', "The Rising of the Shield Hero Season 3", "Frieren: Beyond Journey's End", "Dr. Stone: New World Part 2", "Undead Unluck"]
+    # titleJP = ["", "Tate no Yuusha no Nariagari Season 3", "Sousou no Frieren", "", ""]
+    # scores = ["8.5/10", "7.7", "8.9/10", "N/A", "8.1/10"]
 
     imgRef = []
+    enTitle = ""
+    jpTitle = ""
 
-    count = 0
-    for x in imgList:
-        img = Image.open(x)
-        img = ImageTk.PhotoImage(img)
+    for x in range(0, jsonSize):
+        img_url = airingJson["data"][x]["images"]["jpg"]["image_url"]
+        imgResponse = requests.get(img_url)
+        imgData = imgResponse.content
+        img = ImageTk.PhotoImage(Image.open(BytesIO(imgData)))
         imgRef.append(img)
 
-        scrollList.insert(INSERT, titleEN[count] + '\n' + titleJP[count] + '\nScore: ' + scores[count] + '\n')
+        if (airingJson["data"][x]["title_english"] == None):
+            enTitle = airingJson["data"][x]["title"]
+            jpTitle = airingJson["data"][x]["title"]
+        else:
+            enTitle = airingJson["data"][x]["title_english"]
+            jpTitle = airingJson["data"][x]["title"]
+        
+        scoreText = ""
+        if (airingJson["data"][x]["score"] == None):
+            scoreText ="N/A"
+        else:
+            scoreText = str(airingJson["data"][x]["score"]) + "/10"
+
+        scrollList.insert(INSERT, enTitle + '\n' + jpTitle + '\nScore: ' + scoreText + '\n')
         scrollList.image_create(INSERT, padx = 5, pady = 5, image = img)
         scrollList.insert(INSERT, '\n\n\n')
-        count+=1
 
     scrollList.config(state = "disabled")
 
@@ -212,6 +247,13 @@ def airingButton():
     button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
 
     airing.mainloop()
+
+# The searhc button will have the same layout as the random button and will have an error window if the anime is not found instead of a whole popup screen
+# Maybe some next and previous buttons to scroll through a "list"
+def searchButton():
+    random = Tk()
+    random.title("AnimeListGUI: Search")
+    random.geometry("1000x700")
 
 #GUI itself
 root = Tk()
