@@ -6,6 +6,10 @@ from tkinter.constants import *
 from tkinter.scrolledtext import ScrolledText
 from io import BytesIO
 
+searchIndex = 0
+searchSize = 0
+entryText = ""
+
 # Sub functions for buttons inside the 3 different main buttons
 def saveButton(request):    
     anime ={
@@ -28,6 +32,26 @@ def saveButton(request):
     with open ('list.json', 'w') as outfile:
            json.dump(output, outfile, indent = 4)
 
+def saveSearchButton(request):
+    anime ={
+        "Title" : request["title"],
+        "English Title" : request['title_english'],
+        "Cover Art" : request["images"]["jpg"]["image_url"],
+        "Score" : request["score"],
+        "ID" : request["mal_id"]
+    }
+    #Creates the JSON file for data storage and checks if the file is created if not then it will create one
+    #This saves the programs data even when the program is shut off
+    if not (os.path.exists('list.json')):
+        with open('list.json', 'w') as f:
+            print()
+    output = []
+    if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
+        with open ('list.json', 'r') as outfile:
+            output = json.load(outfile)
+    output.append(anime)
+    with open ('list.json', 'w') as outfile:
+           json.dump(output, outfile, indent = 4)    
 
 def clearList(scrollList):
     scrollList.config(state = "normal")
@@ -36,6 +60,28 @@ def clearList(scrollList):
     scrollList.config(state = "disabled")
     with open('list.json', 'w') as f:
         print()
+
+def getEntryText(eText):
+    global entryText
+    entryText = eText
+    global searchIndex
+    searchIndex = 0
+    return
+
+def decIndex():
+    global searchIndex
+    global searchSize
+    if(searchIndex <= 0):
+        searchIndex = searchSize - 1
+    else:
+        searchIndex -= 1
+
+def incIndex():
+    global searchIndex
+    if (searchIndex > searchSize):
+        searchIndex = 0
+    else:
+        searchIndex += 1
 
 #Fucntions for 3 main buttons
 def randomButton():
@@ -88,7 +134,7 @@ def randomButton():
 
     label_search = Label(random, text = "Search for an anime: ")
     entry_searchBar = Entry(random)
-    button_search = Button(random, text = "Search")
+    button_search = Button(random, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), random.destroy(), searchButton(entry_searchBar.get())])
     button_list = Button(random, text = "List", height = 3, width = 10, command = lambda: [random.destroy(), listButton()])
     button_random = Button(random, text = "Random", height = 3, width = 10, command = lambda: [random.destroy(), randomButton()])
     button_airing = Button(random, text = "Airing", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()])
@@ -179,7 +225,7 @@ def listButton():
 
     label_search = Label(list, text = "Search for an anime: ")
     entry_searchBar = Entry(list)
-    button_search = Button(list, text = "Search")
+    button_search = Button(list, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), list.destroy(), searchButton(entry_searchBar.get())])
 
     label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
     entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
@@ -198,12 +244,6 @@ def airingButton():
     respone = requests.get("https://api.jikan.moe/v4/seasons/now")
     airingJson = respone.json()
     jsonSize = len(airingJson['data'])
-
-    #Retrive them from a json file then store them into lists or smt
-    # imgList = ["spyFam.jpg", "tate.jpg", "frieren.jpg", "stone.jpg", "undead.jpg"]
-    # titleEN = ['Spy x Family Season 2', "The Rising of the Shield Hero Season 3", "Frieren: Beyond Journey's End", "Dr. Stone: New World Part 2", "Undead Unluck"]
-    # titleJP = ["", "Tate no Yuusha no Nariagari Season 3", "Sousou no Frieren", "", ""]
-    # scores = ["8.5/10", "7.7", "8.9/10", "N/A", "8.1/10"]
 
     imgRef = []
     enTitle = ""
@@ -245,7 +285,7 @@ def airingButton():
 
     label_search = Label(airing, text = "Search for an anime: ")
     entry_searchBar = Entry(airing)
-    button_search = Button(airing, text = "Search")
+    button_search = Button(airing, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), airing.destroy(), searchButton()])
 
     label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
     entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
@@ -256,9 +296,92 @@ def airingButton():
 # The searhc button will have the same layout as the random button and will have an error window if the anime is not found instead of a whole popup screen
 # Maybe some next and previous buttons to scroll through a "list"
 def searchButton():
-    random = Tk()
-    random.title("AnimeListGUI: Search")
-    random.geometry("1000x700")
+    search = Tk()
+    search.title("AnimeListGUI: Search")
+    search.geometry("1000x700")
+
+    global entryText
+    global searchSize
+    
+    searchedAnime = entryText.replace(" ", "%20")
+    url = "https://api.jikan.moe/v4/anime?q=" + searchedAnime
+    respone = requests.get(url)
+    searchedJson = respone.json()
+
+    searchSize = len(searchedJson["data"])
+    # print(searchSize)
+
+    img_url = searchedJson["data"][searchIndex]["images"]["jpg"]["image_url"]
+    imgResponse = requests.get(img_url)
+    imgData = imgResponse.content
+    img = ImageTk.PhotoImage(Image.open(BytesIO(imgData)))
+
+    enTitle = ""
+    jpTitle = ""
+
+    if (searchedJson["data"][searchIndex]["title_english"] == None):
+        enTitle = searchedJson["data"][searchIndex]["title"]
+        jpTitle = searchedJson["data"][searchIndex]["title"]
+    else:
+        enTitle = searchedJson["data"][searchIndex]["title_english"]
+        jpTitle = searchedJson["data"][searchIndex]["title"]
+
+    scoreText = ""
+    if (searchedJson["data"][searchIndex]["score"] == None):
+        scoreText ="N/A"
+    else:
+        scoreText = str(searchedJson["data"][searchIndex]["score"]) + "/10"
+
+    label_animeTitle = Label(search, text = enTitle, font =  ('Arial', 18))
+    label_jpTitle = Label(search, text = jpTitle, font = ('Arial', 14))
+    label_animeImg = Label(search, image = img)
+    label_score = Label(search, text = "Score", font = ('Arial', 14))
+    label_scoreNum = Label(search, text = scoreText, font = ('Arial', 16, 'bold'))
+
+    button_save = Button(search, text = "Save", height = 3, width = 10, command = lambda: saveSearchButton(searchedJson["data"][searchIndex]))
+
+    label_search = Label(search, text = "Search for an anime: ")
+    entry_searchBar = Entry(search)
+    button_search = Button(search, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), search.destroy(), searchButton()])
+    button_list = Button(search, text = "List", height = 3, width = 10, command = lambda: [search.destroy(), listButton()])
+    button_random = Button(search, text = "Random", height = 3, width = 10, command = lambda: [search.destroy(), randomButton()])
+    button_airing = Button(search, text = "Airing", height = 3, width = 10, command = lambda: [search.destroy(), airingButton()])
+    
+
+    scrollList = ScrolledText(search, width = 900, height = 13)
+    scrollList.pack(side = 'bottom')
+    
+    label_synopsisTitle = Label(search, text = "Synopsis", font = ('Arial', 14, 'bold'))
+    if (searchedJson['data'][searchIndex]['synopsis'] != None):
+        scrollList.insert(INSERT, searchedJson["data"][searchIndex]["synopsis"] + '\n')
+
+    label_animeTitle.place(relx = .02, rely = .02, anchor = 'nw')
+    label_jpTitle.place(relx = .02, rely = .061, anchor = 'nw')
+    label_animeImg.place(relx = .02, rely = .12, anchor = 'nw')
+
+    label_search.place(relx = 0.9, rely = 0.15, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .195, anchor = 'ne')
+    button_search.place(relx = 0.95, rely = .195, anchor = 'ne')
+
+    label_score.place(relx = 0.35, rely = 0.25, anchor = 'center')
+    label_scoreNum.place(relx = 0.35, rely = 0.29, anchor = 'center')
+    
+    label_synopsisTitle.place(relx = 0.02, rely = .65, anchor = 'w')
+    
+    button_random.place(relx = 0.85, rely = 0.325, anchor = 'e')
+    button_list.place(relx = 0.85, rely = 0.45, anchor = 'e')
+    button_airing.place(relx = 0.85, rely = 0.575, anchor = 'e')
+    button_save.place(relx = 0.3, rely = .35)
+
+    button_next = Button(search, text = "Next", height = 3, width = 10, command = lambda: [incIndex(), search.destroy(), searchButton()])
+    button_previous = Button(search, text = "Prev", height = 3, width = 10, command = lambda: [decIndex(), search.destroy(), searchButton()])
+
+    button_next.place(relx = 0.55, rely = 0.6, anchor = 'center')
+    button_previous.place(relx = 0.45, rely = 0.6, anchor = 'center')
+    
+    scrollList.config(state = "disabled")
+    
+    search.mainloop()
 
 #GUI itself
 root = Tk()
@@ -283,7 +406,7 @@ button_random = Button(buttonFrame, text = "Random", height = 3, width = 10, com
 button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = lambda: [root.destroy(), airingButton()])
 label_search = Label(entryFrame, text = "Search for an anime: ")
 entry_searchBar = Entry(entryFrame)
-button_search = Button(entryFrame, text = "Search")
+button_search = Button(entryFrame, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), root.destroy(), searchButton()])
 
 #Placing the items into the frames/GUI
 label_Title.pack(pady = (100, 20))
