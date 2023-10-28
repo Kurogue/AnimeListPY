@@ -80,17 +80,37 @@ def getEntryText(eText):
 def decIndex():
     global searchIndex
     global searchSize
+    global searchedJson
+
     if(searchIndex <= 0):
         searchIndex = searchSize - 1
     else:
         searchIndex -= 1
 
+    while(searchedJson['data'][searchIndex]["rating"] == "Rx - Hentai"):
+        searchIndex -= 1
+        if(searchIndex <= 0):
+            searchIndex = searchSize - 1
+            break
+
 def incIndex():
     global searchIndex
-    if (searchIndex >= searchSize - 1):
+    global searchSize
+    global searchedJson
+    
+    searchIndex += 1
+
+    if (searchIndex >= searchSize):
         searchIndex = 0
-    else:
+    
+    while(searchedJson['data'][searchIndex]["rating"] == "Rx - Hentai"):
         searchIndex += 1
+        if(searchIndex > searchSize):
+            searchIndex = 0
+            break
+    
+    
+
 
 #Fucntions for 3 main buttons
 def randomButton():
@@ -310,7 +330,9 @@ def searchButton():
     search.geometry("1000x700")
 
     global searchedJson
+    global searchIndex
 
+    
     img_url = searchedJson["data"][searchIndex]["images"]["jpg"]["image_url"]
     imgResponse = requests.get(img_url)
     imgData = imgResponse.content
