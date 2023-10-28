@@ -1,2 +1,4 @@
 /JS
-.json
+*.json
+*.txt
+*.csv
