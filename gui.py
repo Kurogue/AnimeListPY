@@ -9,6 +9,7 @@ from io import BytesIO
 searchIndex = 0
 searchSize = 0
 entryText = ""
+searchedJson = []
 
 # Sub functions for buttons inside the 3 different main buttons
 def saveButton(request):    
@@ -63,9 +64,17 @@ def clearList(scrollList):
 
 def getEntryText(eText):
     global entryText
-    entryText = eText
     global searchIndex
+    global searchSize
+    global searchedJson
+
+    entryText = eText
     searchIndex = 0
+    searchedAnime = entryText.replace(" ", "%20")
+    url = "https://api.jikan.moe/v4/anime?q=" + searchedAnime
+    respone = requests.get(url)
+    searchedJson = respone.json()
+    searchSize = len(searchedJson["data"])
     return
 
 def decIndex():
@@ -78,7 +87,7 @@ def decIndex():
 
 def incIndex():
     global searchIndex
-    if (searchIndex > searchSize):
+    if (searchIndex >= searchSize - 1):
         searchIndex = 0
     else:
         searchIndex += 1
@@ -300,16 +309,7 @@ def searchButton():
     search.title("AnimeListGUI: Search")
     search.geometry("1000x700")
 
-    global entryText
-    global searchSize
-    
-    searchedAnime = entryText.replace(" ", "%20")
-    url = "https://api.jikan.moe/v4/anime?q=" + searchedAnime
-    respone = requests.get(url)
-    searchedJson = respone.json()
-
-    searchSize = len(searchedJson["data"])
-    # print(searchSize)
+    global searchedJson
 
     img_url = searchedJson["data"][searchIndex]["images"]["jpg"]["image_url"]
     imgResponse = requests.get(img_url)
