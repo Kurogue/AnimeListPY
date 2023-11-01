@@ -122,6 +122,10 @@ def randomButton():
     randomJson = respone.json()
     output = []
 
+    if not (os.path.exists('list.json')):
+        with open('list.json', 'w') as f:
+            print()
+
     if os.stat('list.json').st_size != 0:                               #Checks if the json file exists if it does read the file and put it in the output array/list    
         with open ('list.json', 'r') as outfile:
             output = json.load(outfile)
@@ -163,12 +167,12 @@ def randomButton():
 
     label_search = Label(random, text = "Search for an anime: ")
     entry_searchBar = Entry(random)
-    button_search = Button(random, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), random.destroy(), searchButton(entry_searchBar.get())])
+    button_search = Button(random, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), random.destroy(), searchButton()])
     button_list = Button(random, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [random.destroy(), listButton()])
     button_random = Button(random, text = "Random\nAnime", height = 3, width = 10, command = lambda: [random.destroy(), randomButton()])
     button_airing = Button(random, text = "Airing", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()])
 
-    scrollList = ScrolledText(random, width = 900, height = 13)
+    scrollList = ScrolledText(random, width = 900, height = 13, wrap="word")
     scrollList.pack(side = 'bottom')
     
     label_synopsisTitle = Label(random, text = "Synopsis", font = ('Arial', 14, 'bold'))
@@ -208,7 +212,7 @@ def listButton():
     list.title("AnimeListGUI: Your List")
     list.geometry("1000x700")
 
-    scrollList = ScrolledText(list)
+    scrollList = ScrolledText(list, wrap="word")
     scrollList.pack(side = "left", fill = 'both')
 
     output = []
@@ -254,7 +258,7 @@ def listButton():
 
     label_search = Label(list, text = "Search for an anime: ")
     entry_searchBar = Entry(list)
-    button_search = Button(list, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), list.destroy(), searchButton(entry_searchBar.get())])
+    button_search = Button(list, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), list.destroy(), searchButton()])
 
     label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
     entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
@@ -267,7 +271,7 @@ def airingButton():
     airing.title("AnimeListGUI: Currently Airing Anime")
     airing.geometry("1000x700")
 
-    scrollList = ScrolledText(airing)
+    scrollList = ScrolledText(airing, wrap="word")
     scrollList.pack(side = "left", fill = 'both')
 
     respone = requests.get("https://api.jikan.moe/v4/seasons/now")
@@ -370,7 +374,7 @@ def searchButton():
     button_airing = Button(search, text = "Airing", height = 3, width = 10, command = lambda: [search.destroy(), airingButton()])
     
 
-    scrollList = ScrolledText(search, width = 900, height = 13)
+    scrollList = ScrolledText(search, width = 900, height = 13, wrap="word")
     scrollList.pack(side = 'bottom')
     
     label_synopsisTitle = Label(search, text = "Synopsis", font = ('Arial', 14, 'bold'))
