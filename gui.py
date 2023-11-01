@@ -164,9 +164,9 @@ def randomButton():
     label_search = Label(random, text = "Search for an anime: ")
     entry_searchBar = Entry(random)
     button_search = Button(random, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), random.destroy(), searchButton(entry_searchBar.get())])
-    button_list = Button(random, text = "List", height = 3, width = 10, command = lambda: [random.destroy(), listButton()])
-    button_random = Button(random, text = "Random", height = 3, width = 10, command = lambda: [random.destroy(), randomButton()])
-    button_airing = Button(random, text = "Airing", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()])
+    button_list = Button(random, text = "Personal\nList", height = 3, width = 10, command = lambda: [random.destroy(), listButton()])
+    button_random = Button(random, text = "Random\nAnime", height = 3, width = 10, command = lambda: [random.destroy(), randomButton()])
+    button_airing = Button(random, text = "Seasonal\nAnime", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()])
 
     scrollList = ScrolledText(random, width = 900, height = 13)
     scrollList.pack(side = 'bottom')
@@ -245,8 +245,8 @@ def listButton():
     scrollList.config(state = "disabled")
 
     button_clear = Button(list, text = "Clear", height = 3, width = 10, command = lambda: [clearList(scrollList)])
-    button_random = Button(list, text = "Random", height = 3, width = 10, command = lambda: [list.destroy(), randomButton()])
-    button_airing = Button(list, text = "Airing", height = 3, width = 10, command = lambda: [list.destroy(), airingButton()])
+    button_random = Button(list, text = "Random\nAnime", height = 3, width = 10, command = lambda: [list.destroy(), randomButton()])
+    button_airing = Button(list, text = "Seasonal\nAnime", height = 3, width = 10, command = lambda: [list.destroy(), airingButton()])
 
     button_clear.place(relx = 0.9, rely = 0.3, anchor = 'e')
     button_random.place(relx = 0.9, rely = 0.425, anchor = 'e')
@@ -304,8 +304,8 @@ def airingButton():
 
     scrollList.config(state = "disabled")
 
-    button_list = Button(airing, text = "List", height = 3, width = 10, command = lambda: [airing.destroy(), listButton()])
-    button_random = Button(airing, text = "Random", height = 3, width = 10, command = lambda: [airing.destroy(), randomButton()])
+    button_list = Button(airing, text = "Personal\nList", height = 3, width = 10, command = lambda: [airing.destroy(), listButton()])
+    button_random = Button(airing, text = "Random\nAnime", height = 3, width = 10, command = lambda: [airing.destroy(), randomButton()])
     # button_airing = Button(airing, text = "Airing", height = 3, width = 10)
 
     button_random.place(relx = 0.9, rely = 0.3, anchor = 'e')
@@ -365,9 +365,9 @@ def searchButton():
     label_search = Label(search, text = "Search for an anime: ")
     entry_searchBar = Entry(search)
     button_search = Button(search, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), search.destroy(), searchButton()])
-    button_list = Button(search, text = "List", height = 3, width = 10, command = lambda: [search.destroy(), listButton()])
-    button_random = Button(search, text = "Random", height = 3, width = 10, command = lambda: [search.destroy(), randomButton()])
-    button_airing = Button(search, text = "Airing", height = 3, width = 10, command = lambda: [search.destroy(), airingButton()])
+    button_list = Button(search, text = "Personal\nList", height = 3, width = 10, command = lambda: [search.destroy(), listButton()])
+    button_random = Button(search, text = "Random\nAnime", height = 3, width = 10, command = lambda: [search.destroy(), randomButton()])
+    button_airing = Button(search, text = "Seasonal\nAnime", height = 3, width = 10, command = lambda: [search.destroy(), airingButton()])
     
 
     scrollList = ScrolledText(search, width = 900, height = 13)
@@ -423,9 +423,9 @@ descriptionFont = tkFont.Font(size = 14)
 #Items to populate the frames and GUI
 label_Title = Label(root)
 label_description = Label(root)
-button_list = Button(buttonFrame, text = "List", height = 3, width = 10, command = lambda: [root.destroy(), listButton()])
-button_random = Button(buttonFrame, text = "Random", height = 3, width = 10, command = lambda: [root.destroy(), randomButton()])
-button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = lambda: [root.destroy(), airingButton()])
+button_list = Button(buttonFrame, text = "Personal\nList", height = 3, width = 10, command = lambda: [root.destroy(), listButton()])
+button_random = Button(buttonFrame, text = "Random\nAnime", height = 3, width = 10, command = lambda: [root.destroy(), randomButton()])
+button_airing = Button(buttonFrame, text = "Seasonal\nAnime", height = 3, width = 10, command = lambda: [root.destroy(), airingButton()])
 label_search = Label(entryFrame, text = "Search for an anime: ")
 entry_searchBar = Entry(entryFrame)
 button_search = Button(entryFrame, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), root.destroy(), searchButton()])
