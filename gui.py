@@ -11,6 +11,13 @@ searchSize = 0
 entryText = ""
 searchedJson = []
 
+# Colors for the design must be in 6 digit hexadecimal strings
+bgColor = '#072227'
+btnColor = '#AEFEFF'
+txtColor = '#4FBDBA'
+btnTxtColor = '#35858B'
+
+
 # Sub functions for buttons inside the 3 different main buttons
 def saveButton(request):    
     anime ={
