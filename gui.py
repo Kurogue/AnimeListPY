@@ -219,7 +219,7 @@ def randomButton():
 def listButton():
     global gbColor, btnColor, txtColor, btnTxtColor
     list = Tk()
-    list.title("AnimeListGUI: Your List")
+    list.title("AnimeListGUI: Saved Anime")
     list.geometry("1000x700")
     list['bg'] = bgColor
 
