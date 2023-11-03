@@ -12,10 +12,10 @@ entryText = ""
 searchedJson = []
 
 # Colors for the design must be in 6 digit hexadecimal strings
-bgColor = '#072227'
-btnColor = '#AEFEFF'
-txtColor = '#4FBDBA'
-btnTxtColor = '#35858B'
+bgColor = '#FFFBF5'
+btnColor = '#7743DB'
+txtColor = '#7743DB'
+btnTxtColor = '#F7EFE5'
 
 
 # Sub functions for buttons inside the 3 different main buttons
@@ -121,9 +121,11 @@ def incIndex():
 
 #Fucntions for 3 main buttons
 def randomButton():
+    global gbColor, btnColor, txtColor, btnTxtColor
     random = Tk()
     random.title("AnimeListGUI: Random Anime")
     random.geometry("1000x700")
+    random['bg'] = bgColor
 
     respone = requests.get("https://api.jikan.moe/v4/random/anime")
     randomJson = respone.json()
@@ -164,25 +166,25 @@ def randomButton():
     else:
         scoreText = str(randomJson["data"]["score"]) + "/10"
 
-    label_animeTitle = Label(random, text = enTitle, font =  ('Arial', 18))
-    label_jpTitle = Label(random, text = jpTitle, font = ('Arial', 14))
+    label_animeTitle = Label(random, text = enTitle, font =  ('Arial', 18), bg = bgColor, fg = txtColor)
+    label_jpTitle = Label(random, text = jpTitle, font = ('Arial', 14), bg = bgColor, fg = txtColor)
     label_animeImg = Label(random, image = img)
-    label_score = Label(random, text = "Score", font = ('Arial', 14))
-    label_scoreNum = Label(random, text = scoreText, font = ('Arial', 16, 'bold'))
+    label_score = Label(random, text = "Score", font = ('Arial', 14), bg = bgColor, fg = txtColor)
+    label_scoreNum = Label(random, text = scoreText, font = ('Arial', 16, 'bold'), bg = bgColor, fg = txtColor)
 
-    button_save = Button(random, text = "Save", height = 3, width = 10, command = lambda: saveButton(randomJson))
+    button_save = Button(random, text = "Save", height = 3, width = 10, command = lambda: saveButton(randomJson), bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
-    label_search = Label(random, text = "Search for an anime: ")
+    label_search = Label(random, text = "Search for an anime: ", bg = bgColor, fg = txtColor, font = ("bold"))
     entry_searchBar = Entry(random)
-    button_search = Button(random, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), random.destroy(), searchButton()])
-    button_list = Button(random, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [random.destroy(), listButton()])
-    button_random = Button(random, text = "Random\nAnime", height = 3, width = 10, command = lambda: [random.destroy(), randomButton()])
-    button_airing = Button(random, text = "Airing", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()])
+    button_search = Button(random, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), random.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_list = Button(random, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [random.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_random = Button(random, text = "Random\nAnime", height = 3, width = 10, command = lambda: [random.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_airing = Button(random, text = "Airing", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
-    scrollList = ScrolledText(random, width = 900, height = 13, wrap="word")
+    scrollList = ScrolledText(random, width = 900, height = 13, wrap="word", bg = bgColor, fg = txtColor, borderwidth = 0)
     scrollList.pack(side = 'bottom')
     
-    label_synopsisTitle = Label(random, text = "Synopsis", font = ('Arial', 14, 'bold'))
+    label_synopsisTitle = Label(random, text = "Synopsis", font = ('Arial', 14, 'bold'), bg = bgColor, fg = txtColor)
     if (randomJson['data']['synopsis'] != None):
         scrollList.insert(INSERT, randomJson["data"]["synopsis"] + '\n')
 
@@ -191,7 +193,7 @@ def randomButton():
     label_animeImg.place(relx = .02, rely = .12, anchor = 'nw')
 
     label_search.place(relx = 0.9, rely = 0.15, anchor = 'ne')
-    entry_searchBar.place(relx = 0.875, rely = .195, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .2, anchor = 'ne')
     button_search.place(relx = 0.95, rely = .195, anchor = 'ne')
 
     label_score.place(relx = 0.35, rely = 0.25, anchor = 'center')
@@ -215,12 +217,14 @@ def randomButton():
 # List would show the scores while airing would only show the titles and image (maybe url)
 # Add a button to clear the JSON List
 def listButton():
+    global gbColor, btnColor, txtColor, btnTxtColor
     list = Tk()
     list.title("AnimeListGUI: Your List")
     list.geometry("1000x700")
+    list['bg'] = bgColor
 
-    scrollList = ScrolledText(list, wrap="word")
-    scrollList.pack(side = "left", fill = 'both')
+    scrollList = ScrolledText(list, wrap="word", bg = bgColor, fg = txtColor, borderwidth = 0, font = ("Arial", 14))
+    scrollList.pack(side = "left", fill = 'both', expand = 1)
 
     output = []
     imgRef = []
@@ -255,31 +259,33 @@ def listButton():
 
     scrollList.config(state = "disabled")
 
-    button_clear = Button(list, text = "Clear", height = 3, width = 10, command = lambda: [clearList(scrollList)])
-    button_random = Button(list, text = "Random\nAnime", height = 3, width = 10, command = lambda: [list.destroy(), randomButton()])
-    button_airing = Button(list, text = "Airing", height = 3, width = 10, command = lambda: [list.destroy(), airingButton()])
+    button_clear = Button(list, text = "Clear", height = 3, width = 10, command = lambda: [clearList(scrollList)], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_random = Button(list, text = "Random\nAnime", height = 3, width = 10, command = lambda: [list.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_airing = Button(list, text = "Airing", height = 3, width = 10, command = lambda: [list.destroy(), airingButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
     button_clear.place(relx = 0.9, rely = 0.3, anchor = 'e')
     button_random.place(relx = 0.9, rely = 0.425, anchor = 'e')
     button_airing.place(relx = 0.9, rely = 0.55, anchor = 'e')
 
-    label_search = Label(list, text = "Search for an anime: ")
+    label_search = Label(list, text = "Search for an anime: ", bg = bgColor, fg = txtColor, font = ("bold"))
     entry_searchBar = Entry(list)
-    button_search = Button(list, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), list.destroy(), searchButton()])
+    button_search = Button(list, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), list.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
     label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
-    entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .05, anchor = 'ne')
     button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
 
     list.mainloop()
 
 def airingButton():
+    global gbColor, btnColor, txtColor, btnTxtColor
     airing = Tk()
     airing.title("AnimeListGUI: Currently Airing Anime")
     airing.geometry("1000x700")
+    airing['bg'] = bgColor
 
-    scrollList = ScrolledText(airing, wrap="word")
-    scrollList.pack(side = "left", fill = 'both')
+    scrollList = ScrolledText(airing, wrap="word", bg = bgColor, fg = txtColor, borderwidth = 0, font = ("Arial", 14))
+    scrollList.pack(side = "left", fill = 'both', expand = 1)
 
     respone = requests.get("https://api.jikan.moe/v4/seasons/now")
     airingJson = respone.json()
@@ -315,20 +321,20 @@ def airingButton():
 
     scrollList.config(state = "disabled")
 
-    button_list = Button(airing, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [airing.destroy(), listButton()])
-    button_random = Button(airing, text = "Random\nAnime", height = 3, width = 10, command = lambda: [airing.destroy(), randomButton()])
+    button_list = Button(airing, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [airing.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_random = Button(airing, text = "Random\nAnime", height = 3, width = 10, command = lambda: [airing.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     # button_airing = Button(airing, text = "Airing", height = 3, width = 10)
 
     button_random.place(relx = 0.9, rely = 0.3, anchor = 'e')
     button_list.place(relx = 0.9, rely = 0.425, anchor = 'e')
     # button_airing.place(relx = 0.9, rely = 0.55, anchor = 'e')
 
-    label_search = Label(airing, text = "Search for an anime: ")
+    label_search = Label(airing, text = "Search for an anime: ", bg = bgColor, fg = txtColor, font = ("bold"))
     entry_searchBar = Entry(airing)
-    button_search = Button(airing, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), airing.destroy(), searchButton()])
+    button_search = Button(airing, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), airing.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
     label_search.place(relx = 0.9, rely = 0.01, anchor = 'ne')
-    entry_searchBar.place(relx = 0.875, rely = .045, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .05, anchor = 'ne')
     button_search.place(relx = 0.95, rely = .045, anchor = 'ne')
 
     airing.mainloop()
@@ -336,9 +342,11 @@ def airingButton():
 # The search button will have the same layout as the random button and will have an error window if the anime is not found instead of a whole popup screen
 # Maybe some next and previous buttons to scroll through a "list"
 def searchButton():
+    global gbColor, btnColor, txtColor, btnTxtColor
     search = Tk()
     search.title("AnimeListGUI: Search")
     search.geometry("1000x700")
+    search['bg'] = bgColor
 
     global searchedJson
     global searchIndex
@@ -365,26 +373,26 @@ def searchButton():
     else:
         scoreText = str(searchedJson["data"][searchIndex]["score"]) + "/10"
 
-    label_animeTitle = Label(search, text = enTitle, font =  ('Arial', 18))
-    label_jpTitle = Label(search, text = jpTitle, font = ('Arial', 14))
+    label_animeTitle = Label(search, text = enTitle, font =  ('Arial', 18), bg = bgColor, fg = txtColor)
+    label_jpTitle = Label(search, text = jpTitle, font = ('Arial', 14), bg = bgColor, fg = txtColor)
     label_animeImg = Label(search, image = img)
-    label_score = Label(search, text = "Score", font = ('Arial', 14))
-    label_scoreNum = Label(search, text = scoreText, font = ('Arial', 16, 'bold'))
+    label_score = Label(search, text = "Score", font = ('Arial', 14), bg = bgColor, fg = txtColor)
+    label_scoreNum = Label(search, text = scoreText, font = ('Arial', 16, 'bold'), bg = bgColor, fg = txtColor)
 
-    button_save = Button(search, text = "Save", height = 3, width = 10, command = lambda: saveSearchButton(searchedJson["data"][searchIndex]))
+    button_save = Button(search, text = "Save", height = 3, width = 10, command = lambda: saveSearchButton(searchedJson["data"][searchIndex]), bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
-    label_search = Label(search, text = "Search for an anime: ")
+    label_search = Label(search, text = "Search for an anime: ", font = ("bold"), bg = bgColor, fg = txtColor)
     entry_searchBar = Entry(search)
-    button_search = Button(search, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), search.destroy(), searchButton()])
-    button_list = Button(search, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [search.destroy(), listButton()])
-    button_random = Button(search, text = "Random\nAnime", height = 3, width = 10, command = lambda: [search.destroy(), randomButton()])
-    button_airing = Button(search, text = "Airing", height = 3, width = 10, command = lambda: [search.destroy(), airingButton()])
+    button_search = Button(search, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), search.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_list = Button(search, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [search.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_random = Button(search, text = "Random\nAnime", height = 3, width = 10, command = lambda: [search.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_airing = Button(search, text = "Airing", height = 3, width = 10, command = lambda: [search.destroy(), airingButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     
 
-    scrollList = ScrolledText(search, width = 900, height = 13, wrap="word")
+    scrollList = ScrolledText(search, width = 900, height = 13, wrap="word", bg = bgColor, fg = txtColor, borderwidth = 0)
     scrollList.pack(side = 'bottom')
     
-    label_synopsisTitle = Label(search, text = "Synopsis", font = ('Arial', 14, 'bold'))
+    label_synopsisTitle = Label(search, text = "Synopsis", font = ('Arial', 14, 'bold'), bg = bgColor, fg = txtColor)
     if (searchedJson['data'][searchIndex]['synopsis'] != None):
         scrollList.insert(INSERT, searchedJson["data"][searchIndex]["synopsis"] + '\n')
 
@@ -393,7 +401,7 @@ def searchButton():
     label_animeImg.place(relx = .02, rely = .12, anchor = 'nw')
 
     label_search.place(relx = 0.9, rely = 0.15, anchor = 'ne')
-    entry_searchBar.place(relx = 0.875, rely = .195, anchor = 'ne')
+    entry_searchBar.place(relx = 0.875, rely = .2, anchor = 'ne')
     button_search.place(relx = 0.95, rely = .195, anchor = 'ne')
 
     label_score.place(relx = 0.35, rely = 0.25, anchor = 'center')
@@ -404,13 +412,13 @@ def searchButton():
     button_random.place(relx = 0.85, rely = 0.325, anchor = 'e')
     button_list.place(relx = 0.85, rely = 0.45, anchor = 'e')
     button_airing.place(relx = 0.85, rely = 0.575, anchor = 'e')
-    button_save.place(relx = 0.3, rely = .35)
+    button_save.place(relx = 0.29, rely = .35)
 
-    button_next = Button(search, text = "Next", height = 3, width = 10, command = lambda: [incIndex(), search.destroy(), searchButton()])
-    button_previous = Button(search, text = "Prev", height = 3, width = 10, command = lambda: [decIndex(), search.destroy(), searchButton()])
+    button_next = Button(search, text = "Next", height = 3, width = 10, command = lambda: [incIndex(), search.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_previous = Button(search, text = "Prev", height = 3, width = 10, command = lambda: [decIndex(), search.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
     button_next.place(relx = 0.55, rely = 0.6, anchor = 'center')
-    button_previous.place(relx = 0.45, rely = 0.6, anchor = 'center')
+    button_previous.place(relx = 0.425, rely = 0.6, anchor = 'center')
     
     scrollList.config(state = "disabled")
     
@@ -420,10 +428,11 @@ def searchButton():
 root = Tk()
 root.title("AnimeListGUI")
 root.geometry("1000x700")
+root['bg'] = bgColor
 
 #Frames
-buttonFrame = Frame(root)
-entryFrame = Frame(root)
+buttonFrame = Frame(root, bg = bgColor)
+entryFrame = Frame(root, bg = bgColor)
 entryFrame.pack(side = 'bottom', fill = X, pady = (0, 50))
 buttonFrame.pack (side = 'bottom', fill = X, pady = (0, 50))
 
@@ -432,14 +441,17 @@ titleFont = tkFont.Font(size = 26)
 descriptionFont = tkFont.Font(size = 14)
 
 #Items to populate the frames and GUI
-label_Title = Label(root)
-label_description = Label(root)
-button_list = Button(buttonFrame, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [root.destroy(), listButton()])
-button_random = Button(buttonFrame, text = "Random\nAnime", height = 3, width = 10, command = lambda: [root.destroy(), randomButton()])
-button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = lambda: [root.destroy(), airingButton()])
-label_search = Label(entryFrame, text = "Search for an anime: ")
-entry_searchBar = Entry(entryFrame)
-button_search = Button(entryFrame, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), root.destroy(), searchButton()])
+label_Title = Label(root, bg = bgColor, fg = txtColor)
+label_description = Label(root, bg = bgColor, fg = txtColor)
+
+button_list = Button(buttonFrame, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [root.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+button_random = Button(buttonFrame, text = "Random\nAnime", height = 3, width = 10, command = lambda: [root.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = lambda: [root.destroy(), airingButton()],bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+
+label_search = Label(entryFrame, text = "Search for an anime: ", bg = bgColor, fg = txtColor, font = ("bold"))
+entry_searchBar = Entry(entryFrame, highlightthickness = 2)
+
+button_search = Button(entryFrame, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), root.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
 #Placing the items into the frames/GUI
 label_Title.pack(pady = (100, 20))
