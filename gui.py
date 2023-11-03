@@ -177,7 +177,7 @@ def randomButton():
     label_search = Label(random, text = "Search for an anime: ", bg = bgColor, fg = txtColor, font = ("bold"))
     entry_searchBar = Entry(random)
     button_search = Button(random, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), random.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
-    button_list = Button(random, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [random.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_list = Button(random, text = "Saved\nAnime", height = 3, width = 10, command = lambda: [random.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     button_random = Button(random, text = "Random\nAnime", height = 3, width = 10, command = lambda: [random.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     button_airing = Button(random, text = "Airing", height = 3, width = 10, command = lambda: [random.destroy(), airingButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
@@ -321,7 +321,7 @@ def airingButton():
 
     scrollList.config(state = "disabled")
 
-    button_list = Button(airing, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [airing.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_list = Button(airing, text = "Saved\nAnime", height = 3, width = 10, command = lambda: [airing.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     button_random = Button(airing, text = "Random\nAnime", height = 3, width = 10, command = lambda: [airing.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     # button_airing = Button(airing, text = "Airing", height = 3, width = 10)
 
@@ -384,7 +384,7 @@ def searchButton():
     label_search = Label(search, text = "Search for an anime: ", font = ("bold"), bg = bgColor, fg = txtColor)
     entry_searchBar = Entry(search)
     button_search = Button(search, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), search.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
-    button_list = Button(search, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [search.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_list = Button(search, text = "Saved\nAnime", height = 3, width = 10, command = lambda: [search.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     button_random = Button(search, text = "Random\nAnime", height = 3, width = 10, command = lambda: [search.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     button_airing = Button(search, text = "Airing", height = 3, width = 10, command = lambda: [search.destroy(), airingButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
     
@@ -444,7 +444,7 @@ descriptionFont = tkFont.Font(size = 14)
 label_Title = Label(root, bg = bgColor, fg = txtColor)
 label_description = Label(root, bg = bgColor, fg = txtColor)
 
-button_list = Button(buttonFrame, text = "Saved\nAnimes", height = 3, width = 10, command = lambda: [root.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+button_list = Button(buttonFrame, text = "Saved\nAnime", height = 3, width = 10, command = lambda: [root.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 button_random = Button(buttonFrame, text = "Random\nAnime", height = 3, width = 10, command = lambda: [root.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = lambda: [root.destroy(), airingButton()],bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
 
