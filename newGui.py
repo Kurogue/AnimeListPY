@@ -86,7 +86,7 @@ def getEntryText(eText):
         searchIndex += 1
         if(searchIndex > searchSize):
             searchIndex = 0
-            messagebox.showerror("Error", "The anime searched for cannot be found.")
+            messagebox.showerror("Search Error", "The anime searched for cannot be found.")
             mainGui()
             break
     return
