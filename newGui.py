@@ -82,6 +82,13 @@ def getEntryText(eText):
     respone = requests.get(url)
     searchedJson = respone.json()
     searchSize = len(searchedJson["data"])
+    while(searchedJson['data'][searchIndex]["rating"] == "Rx - Hentai"):
+        searchIndex += 1
+        if(searchIndex > searchSize):
+            searchIndex = 0
+            messagebox.showerror("Error", "The anime searched for cannot be found.")
+            mainGui()
+            break
     return
 
 def decIndex():
@@ -423,6 +430,67 @@ def searchButton():
     scrollList.config(state = "disabled")
     
     search.mainloop()
+
+def mainGui():
+    root = Tk()
+    root.title("AnimeListGUI")
+    root.geometry("1000x700")
+    root['bg'] = bgColor
+
+    #Frames
+    buttonFrame = Frame(root, bg = bgColor)
+    entryFrame = Frame(root, bg = bgColor)
+    entryFrame.pack(side = 'bottom', fill = X, pady = (0, 50))
+    buttonFrame.pack (side = 'bottom', fill = X, pady = (0, 50))
+
+    #Fonts
+    titleFont = tkFont.Font(size = 26)
+    descriptionFont = tkFont.Font(size = 14)
+
+    #Items to populate the frames and GUI
+    label_Title = Label(root, bg = bgColor, fg = txtColor)
+    label_description = Label(root, bg = bgColor, fg = txtColor)
+
+    button_list = Button(buttonFrame, text = "Saved\nAnime", height = 3, width = 10, command = lambda: [root.destroy(), listButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_random = Button(buttonFrame, text = "Random\nAnime", height = 3, width = 10, command = lambda: [root.destroy(), randomButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+    button_airing = Button(buttonFrame, text = "Airing", height = 3, width = 10, command = lambda: [root.destroy(), airingButton()],bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+
+    label_search = Label(entryFrame, text = "Search for an anime: ", bg = bgColor, fg = txtColor, font = ("bold"))
+    entry_searchBar = Entry(entryFrame, highlightthickness = 2)
+
+    button_search = Button(entryFrame, text = "Search", command = lambda: [getEntryText(entry_searchBar.get()), root.destroy(), searchButton()], bg = btnColor, activebackground = btnColor, fg = btnTxtColor, activeforeground = btnTxtColor)
+
+    #Placing the items into the frames/GUI
+    label_Title.pack(pady = (100, 20))
+    label_description.pack()
+    button_list.pack(in_=buttonFrame, side = "left", padx = (300, 10)) #side = 'bottom'
+    button_random.pack(in_=buttonFrame, side = "left", padx = 10)
+    button_airing.pack(in_=buttonFrame, side = "left", padx = (10, 0))
+    label_search.pack(side = 'left', padx = (290, 0))
+    entry_searchBar.pack(side = 'left')
+    button_search.pack(side = 'left', padx = (5))
+
+    label_Title.config(font = titleFont, text = "Welcome to AnimeListGUI.")
+    label_description.config(font = descriptionFont, text = "Welcome to AnimeListGUI, in this program it will allow you to find random animes. \nThere is also a search function for you to find any anime you had a question about.\nTo get started hit the random button for your first random anime.")
+
+    '''
+    USE PLACE FOR THE OTHER WINDOWS 
+
+    List - show the title, the image, the score and the url to the mal (should you be able to see the recommended anime here?)
+        The recommendations would show the title of the show, the score and the image of it
+
+    Random - show the title, the image, the score, the url, 4-5 similar animes
+
+    Airing - Basically the list without the scores (like in progress)
+
+    Clear will be a function within the list where you will be able to clear your list
+
+    Quit - X button at the top
+
+    Search - how do we implement it? (Back end problem)
+    '''
+
+    root.mainloop()
 
 #GUI itself
 root = Tk()
